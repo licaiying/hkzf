@@ -15,6 +15,8 @@ class Index extends Component {
         swiper: [],
         // 设置轮播图的默认高度
         imgHeight: 176,
+        // 是否自动播放
+        isPlay:false
       }
 
 
@@ -36,8 +38,15 @@ class Index extends Component {
             // })
 
             // 修改 swiper 状态数据
+            // setState()方法，是一个异步操作
+            // 它的第二个参数(是一个函数)可以获取到更新后的数据，所有可通过第二个参数对数据状态做更新修改
             this.setState({
                 swiper: data
+            },()=>{
+              // 确保swiper有数据,然后再去更新状态数据
+              this.setState({
+                isPlay:true
+              })
             })
         }
       }
@@ -47,7 +56,8 @@ class Index extends Component {
         return (
           <div className="index">
             <Carousel
-              autoplay={true} // 轮播图的自动播放
+              autoplay={this.state.isPlay} // 轮播图的自动播放
+              autoplayInterval={2000} // 自动播放的间隔时间
               infinite // 无线循环播放
             >
               {this.state.swiper.map(val => (
