@@ -4,9 +4,12 @@
 
 import axios from 'axios'
 
-// 1.创建一个axios实例
+// 后台的基础路径
+const BASE_URL = 'http://api-haoke-dev.itheima.net'
+
+// 1.创建一个axios实例(单例模式)
 const axiosAPI = axios.create({
-    baseURL:'http://api-haoke-dev.itheima.net'
+    baseURL:BASE_URL
 })
 
 // 2.添加拦截器
@@ -28,3 +31,4 @@ axiosAPI.interceptors.response.use(function(response){
 })
 
 export default axiosAPI
+export { BASE_URL }

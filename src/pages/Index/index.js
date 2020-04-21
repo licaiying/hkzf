@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 // 导入自己封装的 axios
-import axiosAPI from '../../utils/axios';
+import axiosAPI, { BASE_URL } from '../../utils/axios';
 
 // 导入 走马灯(轮播图)组件
 import { Carousel } from 'antd-mobile'
@@ -55,7 +55,7 @@ class Index extends Component {
                   style={{ display: 'inline-block', width: '100%', height: this.state.imgHeight }}
                 >
                   <img
-                    src={`http://api-haoke-dev.itheima.net${val.imgSrc}`}
+                    src={`${BASE_URL}${val.imgSrc}`}
                     alt=""
                     style={{ width: '100%', verticalAlign: 'top' }}
                     onLoad={() => {
