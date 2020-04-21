@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-// 导入 axios
-import axios from 'axios';
+// 导入自己封装的 axios
+import axiosAPI from '../../utils/axios';
 
 // 导入 走马灯(轮播图)组件
 import { Carousel } from 'antd-mobile'
@@ -25,7 +25,7 @@ class Index extends Component {
 
       // 获取轮播图的数据
       getSwiper =  async () => {
-        const res = await axios.get('http://api-haoke-dev.itheima.net/home/swiper')
+        const res = await axiosAPI.get('/home/swiper')
         // console.log(res)
         if (res.status === 200) {
             // 处理图片的路径
