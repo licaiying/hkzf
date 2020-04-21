@@ -21,8 +21,23 @@ import Profile from "../Profile";
 class Home extends Component {
   state = {
     // 选中状态
-    selectedTab: "/home",
+    selectedTab: this.props.location.pathname,
   };
+
+  componentDidMount(){
+    // console.log(this.props)
+    // 监听路由变化 => 不能用PureComponent做性能优化
+    // 因为PureComponent比较的是前一次和后一次的值，但是用户的路由的跳转，不一定就是同一个路由，所以不能进行比较
+    this.props.history.listen((location)=>{
+      // console.log(location)
+      if (location.pathname !== this.state.selectedTab){
+        // console.log(111)
+        this.setState({
+          selectedTab: location.pathname,
+        });
+      }
+    })
+  }
 
   // 渲染TabBar组件
   renderTabBar = () => {
@@ -41,9 +56,9 @@ class Home extends Component {
             selected={this.state.selectedTab === item.path}
             // 点击事件=>切换路由
             onPress={() => {
-              this.setState({
-                selectedTab: item.path,
-              });
+              // this.setState({
+              //   selectedTab: item.path,
+              // });
               this.props.history.push(item.path);
             }}
           ></TabBar.Item>
