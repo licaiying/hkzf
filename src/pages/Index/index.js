@@ -25,9 +25,10 @@ class Index extends Component {
 
       // 获取轮播图的数据
       getSwiper =  async () => {
-        const res = await axiosAPI.get('/home/swiper')
-        // console.log(res)
-        if (res.status === 200) {
+        // const res = await axiosAPI.get('/home/swiper')
+        const { status, data } = await axiosAPI.get('/home/swiper')
+        // console.log('page',res)
+        if (status === 200) {
             // 处理图片的路径
             // res.data.body.forEach((item)=>{
             //     item.imgSrc = `http://api-haoke-dev.itheima.net${item.imgSrc}`
@@ -35,7 +36,7 @@ class Index extends Component {
 
             // 修改 swiper 状态数据
             this.setState({
-                swiper:res.data.body
+                swiper: data
             })
         }
       }

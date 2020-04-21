@@ -25,7 +25,15 @@ axiosAPI.interceptors.request.use(function(config){
 // 2.2 响应拦截器(请求成功调用)
 axiosAPI.interceptors.response.use(function(response){
     // console.log('请求成功了',response)
-    return response
+
+    // 设计一个新的简化的数据结构，然后返回
+    let newRes = {
+        status:response.data.status,
+        data:response.data.body,
+        description:response.data.description
+    }
+
+    return newRes
 },function(error){
     return Promise.reject(error)
 })
