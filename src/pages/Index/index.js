@@ -29,60 +29,91 @@ class Index extends Component {
 
   componentDidMount() {
     // 调用函数，获取轮播图数据，渲染页面
-    this.getSwiper();
-    this.getGroups();
-    this.getNews();
+    // this.getSwiper();
+    // this.getGroups();
+    // this.getNews();
+    this.getAllDatas();
   }
 
-  // 获取轮播图的数据
-  getSwiper = async () => {
-    // const res = await axiosAPI.get('/home/swiper')
-    const { status, data } = await getSwiper();
-    // console.log('page',res)
-    if (status === 200) {
-      // 处理图片的路径
-      // res.data.body.forEach((item)=>{
-      //     item.imgSrc = `http://api-haoke-dev.itheima.net${item.imgSrc}`
-      // })
 
-      // 修改 swiper 状态数据
-      // setState()方法，是一个异步操作
-      // 它的第二个参数(是一个函数)可以获取到更新后的数据，所有可通过第二个参数对数据状态做更新修改
-      this.setState(
-        {
-          swiper: data,
-        },
-        () => {
-          // 确保swiper有数据,然后再去更新状态数据
+  // 获取首页所有接口数据的方法
+  // 使用Promise.all方法，传入一个包含多个Promise对象的数组，返回resolve结果数据
+  // 目的: 简化发送请求的重复代码
+  getAllDatas = async () => {
+    // const p1 = Promise.resolve(1)  // 返回Promise对象 === new Promise()
+    // const p2 = Promise.resolve([{a:1},{b:2}])
+    // let res = await Promise.all([p1,p2])
+    // console.log(res) // [1,[{a:1},{b:2}]]
+
+   try {
+      let [swiper,groups,news] = await Promise.all([getSwiper(),getGroups(),getNews()])
+      // console.log(swiper,groups,news)  // 返回的是向后台请求的各个字段的接口数据
+      if (swiper.status === 200 && groups.status === 200 && news.status === 200) {
+        this.setState({
+          swiper:swiper.data,
+          groups:groups.data,
+          news:news.data
+        },()=>{
           this.setState({
-            isPlay: true,
-          });
-        }
-      );
+            isPlay:true
+          })
+        })
+      }
+    } catch (error) {
+      console.log(error)
     }
-  };
+  }
 
-  // 获取租房小组数据
-  getGroups = async () => {
-    let { status, data } = await getGroups();
-    // console.log(res)
-    if (status === 200) {
-      this.setState({
-        groups: data,
-      });
-    }
-  };
 
-  // 获取最新资讯数据
-  getNews = async () => {
-    const { status, data } = await getNews();
-    // console.log(status,data)
-    if (status === 200) {
-      this.setState({
-        news: data,
-      });
-    }
-  };
+  // // 获取轮播图的数据
+  // getSwiper = async () => {
+  //   // const res = await axiosAPI.get('/home/swiper')
+  //   const { status, data } = await getSwiper();
+  //   // console.log('page',res)
+  //   if (status === 200) {
+  //     // 处理图片的路径
+  //     // res.data.body.forEach((item)=>{
+  //     //     item.imgSrc = `http://api-haoke-dev.itheima.net${item.imgSrc}`
+  //     // })
+
+  //     // 修改 swiper 状态数据
+  //     // setState()方法，是一个异步操作
+  //     // 它的第二个参数(是一个函数)可以获取到更新后的数据，所有可通过第二个参数对数据状态做更新修改
+  //     this.setState(
+  //       {
+  //         swiper: data,
+  //       },
+  //       () => {
+  //         // 确保swiper有数据,然后再去更新状态数据
+  //         this.setState({
+  //           isPlay: true,
+  //         });
+  //       }
+  //     );
+  //   }
+  // };
+
+  // // 获取租房小组数据
+  // getGroups = async () => {
+  //   let { status, data } = await getGroups();
+  //   // console.log(res)
+  //   if (status === 200) {
+  //     this.setState({
+  //       groups: data,
+  //     });
+  //   }
+  // };
+
+  // // 获取最新资讯数据
+  // getNews = async () => {
+  //   const { status, data } = await getNews();
+  //   // console.log(status,data)
+  //   if (status === 200) {
+  //     this.setState({
+  //       news: data,
+  //     });
+  //   }
+  // };
 
   // 渲染轮播图
   renderSwiper = () => {
@@ -206,7 +237,7 @@ class Index extends Component {
           <h3 className="group-title">最新资讯</h3>
           <WingBlank size="md">{this.renderNews()}</WingBlank>
         </div>
-      </div>
+        </div>
     );
   }
 }
