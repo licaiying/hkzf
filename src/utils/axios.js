@@ -8,7 +8,11 @@ import axios from 'axios'
 import { Toast } from 'antd-mobile'
  
 // 后台的基础路径
-const BASE_URL = 'http://api-haoke-dev.itheima.net'
+// const BASE_URL = 'https://api-haoke-dev.itheima.net'
+
+// 部署到gitHub上时，所需的地址，因为上面的基地址不支持跨域
+const BASE_URL = 'https://api-haoke-web.itheima.net'
+
 
 // 1.创建一个axios实例(单例模式)
 const axiosAPI = axios.create({
