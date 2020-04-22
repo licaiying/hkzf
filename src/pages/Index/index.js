@@ -10,7 +10,7 @@ import { Carousel, Flex } from "antd-mobile";
 import { getSwiper } from "../../utils/api/Home/index.js";
 
 // 导入组件样式文件
-import "./index.css";
+import "./index.scss";
 import Navs from '../../utils/navConfig'
 
 class Index extends Component {
@@ -119,6 +119,14 @@ class Index extends Component {
         {/* 栏目导航区域 */}
         {this.renderNavs()}
 
+        {/* 租房小组 */}
+        <div className="group">
+          <Flex className="group-title" justify="between">
+            <h3>租房小组</h3>
+            <span>更多</span>
+          </Flex>      
+        </div>
+        
       </div>
     );
   }
