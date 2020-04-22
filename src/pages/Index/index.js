@@ -138,6 +138,37 @@ class Index extends Component {
     );
   };
 
+  // 渲染租房小组
+  renderGroups = () => {
+    return (
+      // <></>:空标签，是一个占位符，相当于<div></div>
+      <> 
+        {/* 标题部分 */}
+        <Flex className="group-title" justify="between">
+          <h3>租房小组</h3>
+          <span>更多</span>
+        </Flex>
+        {/* 宫格部分 */}
+        <Grid
+          data={this.state.groups}
+          columnNum={2}
+          hasLine={false}
+          square={false}
+          renderItem={(item) => (
+            // item结构
+            <Flex className="grid-item" justify="between" key={item.id}>
+              <div className="desc">
+                <h3>{item.title}</h3>
+                <p>{item.desc}</p>
+              </div>
+              <img src={`${BASE_URL}${item.imgSrc}`} alt="" />
+            </Flex>
+          )}
+        />
+      </>
+    );
+  };
+
   // 渲染最新资讯
   renderNews() {
     return this.state.news.map((item) => (
@@ -167,28 +198,7 @@ class Index extends Component {
 
         {/* 租房小组区域 */}
         <div className="group">
-          {/* 标题部分 */}
-          <Flex className="group-title" justify="between">
-            <h3>租房小组</h3>
-            <span>更多</span>
-          </Flex>
-          {/* 宫格部分 */}
-          <Grid
-            data={this.state.groups}
-            columnNum={2}
-            hasLine={false}
-            square={false}
-            renderItem={(item) => (
-              // item结构
-              <Flex className="grid-item" justify="between" key={item.id}>
-                <div className="desc">
-                  <h3>{item.title}</h3>
-                  <p>{item.desc}</p>
-                </div>
-                <img src={`${BASE_URL}${item.imgSrc}`} alt="" />
-              </Flex>
-            )}
-          />
+          {this.renderGroups()}
         </div>
 
         {/* 最新资讯区域 */}
@@ -196,7 +206,6 @@ class Index extends Component {
           <h3 className="group-title">最新资讯</h3>
           <WingBlank size="md">{this.renderNews()}</WingBlank>
         </div>
-
       </div>
     );
   }
