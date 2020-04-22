@@ -4,32 +4,34 @@ import React, { Component } from "react";
 import { BASE_URL } from "../../utils/axios";
 
 // 导入 走马灯(轮播图)组件
-import { Carousel, Flex, Grid } from "antd-mobile";
+import { Carousel, Flex, Grid, WingBlank } from "antd-mobile";
 
 // 导入 获取 轮播图数据的接口请求方法
-import { getSwiper, getGroups } from "../../utils/api/Home/index.js";
+import { getSwiper, getGroups, getNews } from "../../utils/api/Home/index.js";
 
 // 导入组件样式文件
 import "./index.scss";
 import Navs from "../../utils/navConfig";
 
-
 class Index extends Component {
   state = {
     // 轮播图的数据
     swiper: [],
+    // 租房小组数据
+    groups: [],
+    // 最新资讯数据
+    news: [],
     // 设置轮播图的默认高度
     imgHeight: 176,
     // 是否自动播放
     isPlay: false,
-    // 租房小组数据
-    groups:[]
   };
 
   componentDidMount() {
     // 调用函数，获取轮播图数据，渲染页面
     this.getSwiper();
-    this.getGroups()
+    this.getGroups();
+    this.getNews();
   }
 
   // 获取轮播图的数据
@@ -62,14 +64,25 @@ class Index extends Component {
 
   // 获取租房小组数据
   getGroups = async () => {
-    let {status,data} = await getGroups()
+    let { status, data } = await getGroups();
     // console.log(res)
     if (status === 200) {
       this.setState({
-        groups:data
-      })
+        groups: data,
+      });
     }
-  }
+  };
+
+  // 获取最新资讯数据
+  getNews = async () => {
+    const { status, data } = await getNews();
+    // console.log(status,data)
+    if (status === 200) {
+      this.setState({
+        news: data,
+      });
+    }
+  };
 
   // 渲染轮播图
   renderSwiper = () => {
@@ -125,6 +138,24 @@ class Index extends Component {
     );
   };
 
+  // 渲染最新资讯
+  renderNews() {
+    return this.state.news.map((item) => (
+      <div className="news-item" key={item.id}>
+        <div className="imgwrap">
+          <img className="img" src={`${BASE_URL}${item.imgSrc}`} alt="" />
+        </div>
+        <Flex className="content" direction="column" justify="between">
+          <h3 className="title">{item.title}</h3>
+          <Flex className="info" justify="between">
+            <span>{item.from}</span>
+            <span>{item.date}</span>
+          </Flex>
+        </Flex>
+      </div>
+    ));
+  }
+
   render() {
     return (
       <div className="index">
@@ -159,7 +190,14 @@ class Index extends Component {
             )}
           />
         </div>
+
+        {/* 最新资讯区域 */}
+        <div className="news">
+          <h3 className="group-title">最新资讯</h3>
+          <WingBlank size="md">{this.renderNews()}</WingBlank>
         </div>
+
+      </div>
     );
   }
 }
