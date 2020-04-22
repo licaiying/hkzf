@@ -17,27 +17,42 @@ import Index from "../Index";
 import House from "../House";
 import Profile from "../Profile";
 
-
 class Home extends Component {
   state = {
     // 选中状态
     selectedTab: this.props.location.pathname,
   };
 
-  componentDidMount(){
+  componentDidMount() {
+    this.listenRouter()
+  }
+
+
+  // 定义一个方法，用来监听路由的变化
+  listenRouter = () => {
     // console.log(this.props)
     // 监听路由变化 => 不能用PureComponent做性能优化
     // 因为PureComponent比较的是前一次和后一次的值，但是用户的路由的跳转，不一定就是同一个路由，所以不能进行比较
     // 路由监听事件解绑
-    this.props.history.listen((location)=>{
+    // 使用this的目的：为了接收变量，方便别的函数调用
+
+    this.unlisten = this.props.history.listen((location) => {
       // console.log(location)
-      if (location.pathname !== this.state.selectedTab){
+      if (location.pathname !== this.state.selectedTab) {
         // console.log(111)
         this.setState({
           selectedTab: location.pathname,
         });
       }
-    })
+    });
+    // console.log(this.unlisten)  // ƒ () { checkDOMListeners(-1);unlisten(); }
+  };
+
+  
+  // 组件销毁
+  componentWillUnmount() {
+    // 销毁路由的监听事件
+    this.unlisten();
   }
 
   // 渲染TabBar组件
@@ -79,9 +94,8 @@ class Home extends Component {
         <Route path="/home/profile" component={Profile}></Route>
 
         {/* 标签栏tabBar结构 */}
-        <div className="tabBar">
-            {this.renderTabBar()}</div>
-        </div>
+        <div className="tabBar">{this.renderTabBar()}</div>
+      </div>
     );
   }
 }
