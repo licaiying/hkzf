@@ -7,3 +7,13 @@ export function getSwiper(){
     // 返回的是一个Promise对象
     return axiosAPI.get('/home/swiper')
 }
+
+// 2.租房小组接口
+export function getGroups(area='AREA|88cff55c-aaa4-e2e0'){
+    // 返回的是一个Promise对象
+    return axiosAPI.get('/home/groups',{
+        params:{
+            area
+        }
+    })
+}
