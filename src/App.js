@@ -23,7 +23,9 @@ function App() {
           <Redirect exact from="/" to="/home"></Redirect>
           {/* 项目的一级路由 */}
           <Route path="/home" component={Home}></Route>
+          {/* 城市选择列表 */}
           <Route path="/cityList" component={CityList}></Route>
+          {/* 地图找房 */}
           <Route path="/map" component={Map}></Route>
           {/* 配置404页面 */}
           <Route component={NotFound}></Route>

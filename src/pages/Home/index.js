@@ -28,6 +28,7 @@ class Home extends Component {
     // console.log(this.props)
     // 监听路由变化 => 不能用PureComponent做性能优化
     // 因为PureComponent比较的是前一次和后一次的值，但是用户的路由的跳转，不一定就是同一个路由，所以不能进行比较
+    // 路由监听事件解绑
     this.props.history.listen((location)=>{
       // console.log(location)
       if (location.pathname !== this.state.selectedTab){

@@ -4,8 +4,8 @@ import React, { Component } from "react";
 import { BASE_URL } from "../../utils/axios";
 
 // 导入 走马灯(轮播图)组件
-import { Carousel, Flex, Grid, WingBlank } from "antd-mobile";
-
+import { Carousel, Flex, Grid, WingBlank, SearchBar } from "antd-mobile";
+ 
 // 导入 获取 轮播图数据的接口请求方法
 import { getSwiper, getGroups, getNews } from "../../utils/api/Home/index.js";
 
@@ -14,6 +14,7 @@ import "./index.scss";
 import Navs from "../../utils/navConfig";
 
 class Index extends Component {
+   
   state = {
     // 轮播图的数据
     swiper: [],
@@ -21,6 +22,8 @@ class Index extends Component {
     groups: [],
     // 最新资讯数据
     news: [],
+    // 头部搜索的关键字
+    keyword:'',
     // 设置轮播图的默认高度
     imgHeight: 176,
     // 是否自动播放
@@ -114,6 +117,33 @@ class Index extends Component {
   //     });
   //   }
   // };
+
+  // 渲染顶部导航
+  renderTopNav = () => {
+    const { push } = this.props.history
+    return (
+      <Flex justify="around" className="topNav">
+        <div className="searchBox">
+          <div className="city" onClick={()=>{
+            push('/cityList')
+          }}>
+            北京<i className="iconfont icon-arrow" />
+          </div>
+          <SearchBar
+          // 受控组件(数据的双向绑定)
+            value={this.state.keyword}
+            onChange={(v) => this.setState({ keyword: v })}
+            placeholder="请输入小区或地址"
+          />
+        </div>
+        <div className="map" onClick={()=>{
+          push('/map')
+        }}>
+          <i key="0" className="iconfont icon-map" />
+        </div>
+      </Flex>
+    )
+  }
 
   // 渲染轮播图
   renderSwiper = () => {
@@ -221,6 +251,9 @@ class Index extends Component {
   render() {
     return (
       <div className="index">
+        {/* 头部搜索区域 */}
+        {this.renderTopNav()}
+
         {/* 轮播图区域 */}
         {this.renderSwiper()}
 
