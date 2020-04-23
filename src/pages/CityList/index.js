@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { getCityList, getHotCity } from "../../utils/api/City";
+import { getCurrCity } from "../../utils";
 
 
 class CltyList extends Component {
@@ -25,7 +26,13 @@ class CltyList extends Component {
             cityIndex.unshift('hot') // 将 'hot' 字段，加入到 首字母列表数组cityIndex 的头部
         }
 
-      //  console.log(cityList,cityIndex) // {b: Array(3), a: Array(1), n: Array(6),...} ["hot", "a", "b", "c",......]
+       // 在城市列表数据中，加入当前城市数据
+       const res = await getCurrCity()
+       cityList['#'] = [res]
+       cityIndex.unshift('#')
+
+
+       console.log(cityList,cityIndex) // {b: Array(3), a: Array(1), n: Array(6),...} ["hot", "a", "b", "c",......]
     }
   };
 
