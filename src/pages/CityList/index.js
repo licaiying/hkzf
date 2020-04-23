@@ -2,6 +2,12 @@ import React, { Component } from "react";
 import { getCityList, getHotCity } from "../../utils/api/City";
 import { getCurrCity } from "../../utils";
 
+import {List} from 'react-virtualized';
+
+const list = Array.from(new Array(100)).map((item,index)=>{
+  return {name:index}
+})
+
 
 class CltyList extends Component {
 
@@ -9,6 +15,19 @@ class CltyList extends Component {
         this.getCityList()
     }
 
+    rowRenderer = ({
+      key, // Unique key within array of rows
+      index, // Index of row within collection
+      isScrolling, // The List is currently being scrolled
+      isVisible, // This row is visible within the List (eg it is not an overscanned row)
+      style, // Style object to be applied to row (to position it)
+    }) => {
+      return (
+        <div key={key} style={style}>
+          {index}
+        </div>
+      );
+    }
 
   // 获取所有城市的列表数据
   getCityList = async () => {
@@ -75,7 +94,18 @@ class CltyList extends Component {
 
 
   render() {
-    return <div>CltyList</div>;
+    return (
+      <div>
+        {/* 城市列表 */}
+        <List
+          width={300}
+          height={300}
+          rowCount={list.length}
+          rowHeight={20}
+          rowRenderer={this.rowRenderer}
+        />
+      </div>
+    )
   }
 
 }
