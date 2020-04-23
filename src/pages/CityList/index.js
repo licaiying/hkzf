@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { getCityList } from "../../utils/api/City";
+import { getCityList, getHotCity } from "../../utils/api/City";
 
 
 class CltyList extends Component {
@@ -14,8 +14,18 @@ class CltyList extends Component {
     const {status,data} = await getCityList();
     // console.log(res); // {status: 200, data: Array(92), description: "请求成功"}
     if (status === 200) {
-       let {cityList,cityIndex} = this.formatCities(data) 
-       console.log(cityList,cityIndex)   
+        // 按首字母归类的数据
+       let {cityList,cityIndex} = this.formatCities(data)
+       
+       // 在城市列表数据中，加入热门城市数据
+       // 重新命名，防止与第一次数据冲突
+        const {status:st, data:hot} = await getHotCity()
+        if (st === 200) {
+            cityList['hot'] = hot // 加入热门城市字段和数据
+            cityIndex.unshift('hot') // 将 'hot' 字段，加入到 首字母列表数组cityIndex 的头部
+        }
+
+       console.log(cityList,cityIndex) // {b: Array(3), a: Array(1), n: Array(6),...} ["hot", "a", "b", "c",......]
     }
   };
 

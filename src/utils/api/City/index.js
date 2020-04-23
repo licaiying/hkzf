@@ -24,3 +24,9 @@ export function getCityList(level = 1){
         }
     })
 }
+
+
+// 获取热门城市
+export function getHotCity(){
+    return axiosAPI('/area/hot')
+}
