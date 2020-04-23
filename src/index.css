@@ -21,9 +21,10 @@ ul,li {
 }
 
 * {
-    /* touch-action: pan-y;和 touch-action: none; 是解决 触碰轮播图-> 就警告 的问题的，二者选其一就可以*/   
+    /* touch-action: pan-y;和 touch-action: none; 是解决 触碰轮播图-> 就警告 的问题的，二者选其一就可以*/  
+     /* 但是touch-action: none;虽然能解决轮播图警告问题，但是移动端不支持滑动下拉 */
     touch-action: pan-y;
-    /* touch-action: none; */
+    /* touch-action: none; */  
     box-sizing: border-box; 
 }
 
