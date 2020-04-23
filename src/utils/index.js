@@ -2,7 +2,8 @@
 
 import { getCityInfo } from "./api/City";
 
-// 根据百度地图的API获取定位城市的名字
+
+// 根据百度地图的API获取定位城市的名字------------------------------
 const getCityName = async () => {
   return new Promise((resolve, reject) => {
     let myCity = new window.BMap.LocalCity();
@@ -13,16 +14,32 @@ const getCityName = async () => {
   });
 };
 
-// 封装 定位当前城市 的方法，供全局组件使用
+// 封装 定位当前城市 的方法，供全局组件使用-------------------------------------
 // 思路：1.该方法返回Promise对象=>调用者可以通过async和await的方式，直接获取resolve的数据
 //       2.将城市信息存储到本地=>localStorage
 
 // 定义key
 const CURR_CITY = "curr_city";
 
+// 封装本地存储方法
+// 1.存储本地数据
+export function setLocal(key,val) {
+    localStorage.setItem(key,val)
+}
+
+// 2.获取本地数据
+export function getLocal (key) {
+    return localStorage.getItem(key)
+}
+
+// 3.删除本地数据
+export function delLocal (key) {
+    localStorage.removeItem(key)
+}
+
 export async function getCurrCity() {
   // 先从本地获取之前存储过的城市定位信息
-  let currCity = JSON.parse(localStorage.getItem(CURR_CITY));
+  let currCity = JSON.parse(getLocal(CURR_CITY));
 
   // 获取到城市信息，做对比
   let res = await getCityName();
@@ -32,7 +49,7 @@ export async function getCurrCity() {
   // console.log(realName)
 
   // 做判断
-  if (!currCity || (currCity && realName !== currCity.label)) {
+  if (!currCity || realName !== currCity.label) {
     // 如果本地没有
     // 调用 百度地图的API 获取定位信息，返回Promise对象=>resolve结果
     return new Promise(async (resolve, reject) => {
@@ -43,7 +60,7 @@ export async function getCurrCity() {
         // console.log(data) // {label: "上海", value: "AREA|dbf46d32-7e76-1196"}
         if (status === 200) {
           // 存储到本地
-          localStorage.setItem(CURR_CITY, JSON.stringify(data));
+         setLocal(CURR_CITY, JSON.stringify(data));
           // 传递数据
           resolve(data);
         } else {
