@@ -8,12 +8,20 @@ import './index.scss'
 
 import {List, AutoSizer} from 'react-virtualized';
 
-const list = Array.from(new Array(100)).map((item,index)=>{
-  return {name:index}
-})
+// const list = Array.from(new Array(100)).map((item,index)=>{
+//   return {name:index}
+// })
 
 
 class CltyList extends Component {
+
+    // 设置列表状态数据
+    state = {
+      // 归类的城市数据
+      cityList:{},
+      // 归类的城市数据的索引
+      cityIndex:[]
+    }
 
     componentDidMount(){
         this.getCityList()
@@ -27,8 +35,9 @@ class CltyList extends Component {
       style, // Style object to be applied to row (to position it)
     }) => {
       return (
-        <div key={key} style={style}>
-          {index}
+        <div key={key} style={style} className="city-item">
+          <div className="title">A</div>
+          <div className="name">安庆</div>
         </div>
       );
     }
@@ -54,8 +63,13 @@ class CltyList extends Component {
        cityList['#'] = [res]
        cityIndex.unshift('#')
 
+       // 数据响应式处理
+       this.setState({
+         cityList,
+         cityIndex
+       })
 
-       console.log(cityList,cityIndex) // {b: Array(3), a: Array(1), n: Array(6),...} ["hot", "a", "b", "c",......]
+      //  console.log(cityList,cityIndex) // {b: Array(3), a: Array(1), n: Array(6),...} ["hot", "a", "b", "c",......]
     }
   };
 
@@ -114,8 +128,8 @@ class CltyList extends Component {
           {({height, width}) => (
             <List
               height={height}
-              rowCount={list.length}
-              rowHeight={50}
+              rowCount={this.state.cityIndex.length}
+              rowHeight={100}
               rowRenderer={this.rowRenderer}
               width={width}
             />
