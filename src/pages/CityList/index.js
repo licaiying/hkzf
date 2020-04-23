@@ -25,7 +25,7 @@ class CltyList extends Component {
             cityIndex.unshift('hot') // 将 'hot' 字段，加入到 首字母列表数组cityIndex 的头部
         }
 
-       console.log(cityList,cityIndex) // {b: Array(3), a: Array(1), n: Array(6),...} ["hot", "a", "b", "c",......]
+      //  console.log(cityList,cityIndex) // {b: Array(3), a: Array(1), n: Array(6),...} ["hot", "a", "b", "c",......]
     }
   };
 

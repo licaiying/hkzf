@@ -12,7 +12,7 @@ import { getSwiper, getGroups, getNews } from "../../utils/api/Home/index.js";
 // 导入组件样式文件
 import "./index.scss";
 import Navs from "../../utils/navConfig";
-import { getCityInfo } from '../../utils/api/City'
+import { getCurrCity } from '../../utils/index.js'
 
 class Index extends Component {
    
@@ -42,42 +42,50 @@ class Index extends Component {
     // this.getGroups();
     // this.getNews();
     this.getAllDatas();
-    this.getCurCity();
+    this.getCurrCity();
   }
 
+  // 调用方法，获取定位信息
+  getCurrCity = async () => {
+    const res = await getCurrCity()
+    // console.log(res)
+    this.setState({
+      currCity:res
+    })
+  }
 
   // 根据百度地图获取当前定位城市
-  getCurCity = () => {
-    // 改造前写法：
-    // callback回调函数
-    // function myFun(result){
-    //   let cityName = result.name;
-    //   console.log("当前定位城市:"+cityName); // 当前定位城市:大同市
-    // }
-    // // 根据IP定位当前城市的类LocalCity =>是一个构造函数
-    // let myCity = new window.BMap.LocalCity();
-    // // 调用获取定位城市实例
-    // myCity.get(myFun); 
+  // getCurCity = () => {
+  //   // 改造前写法：
+  //   // callback回调函数
+  //   // function myFun(result){
+  //   //   let cityName = result.name;
+  //   //   console.log("当前定位城市:"+cityName); // 当前定位城市:大同市
+  //   // }
+  //   // // 根据IP定位当前城市的类LocalCity =>是一个构造函数
+  //   // let myCity = new window.BMap.LocalCity();
+  //   // // 调用获取定位城市实例
+  //   // myCity.get(myFun); 
 
-    // 改造后写法：    
-    // 根据IP定位当前城市的类LocalCity =>是一个构造函数
-    let myCity = new window.BMap.LocalCity();
-    // 调用获取定位城市实例
-    myCity.get(async (result)=>{
-      // console.log(result) // {center: J, level: 12, name: "大同市", code: 355}
-      // let cityName = result.name;
-      // console.log("当前定位城市:"+cityName); // 当前定位城市:大同市
+  //   // 改造后写法：    
+  //   // 根据IP定位当前城市的类LocalCity =>是一个构造函数
+  //   let myCity = new window.BMap.LocalCity();
+  //   // 调用获取定位城市实例
+  //   myCity.get(async (result)=>{
+  //     // console.log(result) // {center: J, level: 12, name: "大同市", code: 355}
+  //     // let cityName = result.name;
+  //     // console.log("当前定位城市:"+cityName); // 当前定位城市:大同市
 
-      // 调用接口，获取城市的详细信息
-      const {status,data} = await getCityInfo(result.name)
-      // console.log(data) // {label: "上海", value: "AREA|dbf46d32-7e76-1196"}
-      if (status === 200) {
-        this.setState({
-          currCity:data // 后台的数据只有：北京、上海、广州、深圳 四个城市
-        })
-      }
-    }); 
-  }
+  //     // 调用接口，获取城市的详细信息
+  //     const {status,data} = await getCityInfo(result.name)
+  //     // console.log(data) // {label: "上海", value: "AREA|dbf46d32-7e76-1196"}
+  //     if (status === 200) {
+  //       this.setState({
+  //         currCity:data // 后台的数据只有：北京、上海、广州、深圳 四个城市
+  //       })
+  //     }
+  //   }); 
+  // }
 
 
   // 获取首页所有接口数据的方法
