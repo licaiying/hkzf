@@ -2,7 +2,11 @@ import React, { Component } from "react";
 import { getCityList, getHotCity } from "../../utils/api/City";
 import { getCurrCity } from "../../utils";
 
-import {List} from 'react-virtualized';
+import { NavBar, Icon } from 'antd-mobile'
+
+import './index.scss'
+
+import {List, AutoSizer} from 'react-virtualized';
 
 const list = Array.from(new Array(100)).map((item,index)=>{
   return {name:index}
@@ -95,15 +99,28 @@ class CltyList extends Component {
 
   render() {
     return (
-      <div>
+      <div className="cityList">
+        {/* 导航区域 */}
+        <NavBar
+          mode="dark"
+          icon={<Icon type="left" />}
+          onLeftClick={() => this.props.history.goBack()}
+        >
+          城市选择
+        </NavBar>
+
         {/* 城市列表 */}
-        <List
-          width={300}
-          height={300}
-          rowCount={list.length}
-          rowHeight={20}
-          rowRenderer={this.rowRenderer}
-        />
+        <AutoSizer>
+          {({height, width}) => (
+            <List
+              height={height}
+              rowCount={list.length}
+              rowHeight={50}
+              rowRenderer={this.rowRenderer}
+              width={width}
+            />
+          )}
+        </AutoSizer>
       </div>
     )
   }
