@@ -179,9 +179,9 @@ class CltyList extends Component {
             this.listRef.scrollToRow(index)
 
             // 根据当前索引，改变状态数据，实现高亮的效果
-            this.setState({
-              activeIndex:index
-            })
+            // this.setState({
+            //   activeIndex:index
+            // })
           }}
         >
           <span className={activeIndex === index ? 'index-active' : ''}>
@@ -192,6 +192,20 @@ class CltyList extends Component {
     })
   }
 
+  // 每次页面渲染完后，都会执行的回调函数
+  onRowsRendered = ({startIndex}) => {
+    // console.log(index)
+    // console.log(startIndex)
+    // startIndex:当前滚动行的索引
+
+   if (this.state.activeIndex !== startIndex) {
+      // console.log(startIndex)
+      // 根据 当前滚动行的索引 实现字母的高亮显示
+      this.setState({
+        activeIndex:startIndex
+      })
+    }
+  }
 
   render() {
     return (
@@ -212,6 +226,7 @@ class CltyList extends Component {
             // ref = {(e) => this.listRef = e} 获取组件实例的简写方法(推荐使用)
               ref = {(e) => this.listRef = e}
               scrollToAlignment = 'start' // 点击定位时，始终将行与列表顶部对齐
+              onRowsRendered = {this.onRowsRendered}
               height={height}
               rowCount={this.state.cityIndex.length}
               rowHeight={this.excueHeight}
