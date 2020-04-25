@@ -24,7 +24,7 @@ class CltyList extends Component {
     }
 
     componentDidMount(){
-        this.getCityList()
+      this.getCityList()
     }
 
     // 格式化列表的title
@@ -168,6 +168,14 @@ class CltyList extends Component {
         <li
           key={item}
           className="city-index-item"
+          onClick = {() => {
+            // 点击的时候，定位列表
+            // console.log(this.listRef)
+            // console.log(this.listRef.scrollToRow)
+
+            // index：为当前点击的字母的索引
+            this.listRef.scrollToRow(index) 
+          }}
         >
           <span className={0 === index ? 'index-active' : ''}>
             {this.formatLetter(item, true)}
@@ -194,6 +202,9 @@ class CltyList extends Component {
         <AutoSizer>
           {({height, width}) => (
             <List
+            // ref = {(e) => this.listRef = e} 获取组件实例的简写方法(推荐使用)
+              ref = {(e) => this.listRef = e}
+              scrollToAlignment = 'start' // 点击定位时，始终将行与列表顶部对齐
               height={height}
               rowCount={this.state.cityIndex.length}
               rowHeight={this.excueHeight}
