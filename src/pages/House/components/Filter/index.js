@@ -25,7 +25,26 @@ export default class Filter extends Component {
 
   // 定义状态数据
   state = {
+    // 高亮的数据状态
     titleSelectedStatus
+  }
+
+  // 父组件：提供 修改数据高亮状态的方法，给子组件使用
+  // 这里必须是箭头函数，否则子组件无法调用该方法
+  onTitleClick = (type) => {
+    // 父组件接收子组件传递过来的type值
+    // console.log('点击的是：',type) // 点击的是： price
+
+    // 拷贝一份新的高亮状态数据
+    // [type]:true:ES6写法，可给变量直接赋值
+    // {...titleSelectedStatus,[type]:true} => 当点击的[type]的值，变为true时，覆盖前面的...titleSelectedStatus的对应的值
+    let newSelected = {...titleSelectedStatus,[type]:true} 
+    // console.log(newSelected) // {area: false, mode: false, price: false, more: true}
+
+    // 根据点击的数据，显示相应的高亮状态
+    this.setState({
+      titleSelectedStatus:newSelected
+    })
   }
 
   render() {
@@ -36,7 +55,8 @@ export default class Filter extends Component {
 
         <div className={styles.content}>
           {/* 标题栏 */}
-          <FilterTitle titleSelectedStatus={this.state.titleSelectedStatus} />
+          {/* 父组件传值给子组件控制状态 */}
+          <FilterTitle titleSelectedStatus={this.state.titleSelectedStatus} onTitleClick={this.onTitleClick} />
 
           {/* 前三个菜单对应的内容： */}
           {/* <FilterPicker /> */}

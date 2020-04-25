@@ -14,11 +14,16 @@ const titleList = [
 
 export default function FilterTitle(props) {
   // console.log(props) // {titleSelectedStatus: {…}}
-  const { titleSelectedStatus } = props 
+  const { titleSelectedStatus, onTitleClick } = props 
+  // console.log(onTitleClick)
   return (
     <Flex align="center" className={styles.root}>
       {
-        titleList.map((item) => <Flex.Item key={item.type}>
+        titleList.map((item) => <Flex.Item key={item.type} onClick = {()=>{
+          // console.log('执行高亮')
+          // 执行父组件提供的修改高亮状态显示的方法
+          onTitleClick(item.type)
+        }}>
           {/* 选中类名： styles.selected */}
           <span className={[styles.dropdown, titleSelectedStatus[item.type]?styles.selected:''].join(' ')}>
             <span>{item.title}</span>
