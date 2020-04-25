@@ -59,12 +59,28 @@ export default class Filter extends Component {
   }
 
 
+  // 点击 确定 按钮时，关闭Picker组件
+  onOk = () => {
+    this.setState({
+      openType:''
+    })
+  }
+
+
+  // 点击 取消 按钮时，关闭Picker组件
+  onCancle = () => {
+    this.setState({
+      openType:''
+    })
+  } 
+
+
   render() {
     return (
       <div className={styles.root}>
         {/* 前三个菜单的遮罩层 */}
         {
-          this.isShowPicker() ? <div className={styles.mask} /> : null
+          this.isShowPicker() ? <div className={styles.mask} onClick={this.onCancle} /> : null
         }
 
         <div className={styles.content}>
@@ -74,7 +90,7 @@ export default class Filter extends Component {
 
           {/* 前三个菜单对应的内容： */}
           {
-            this.isShowPicker() ? <FilterPicker /> : null
+            this.isShowPicker() ? <FilterPicker onOk={this.onOk} onCancle={this.onCancle} /> : null
           }
 
           {/* 最后一个菜单对应的内容： */}
