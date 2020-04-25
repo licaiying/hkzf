@@ -39,6 +39,17 @@ class CltyList extends Component {
       }
     }
 
+    // 动态计算高度
+    excueHeight = ({index}) => {
+      // console.log(index)
+      const {cityIndex,cityList} = this.state
+      // 计算公式：title高度36 + 当前归类的城市数量*50
+      // 当前归类的城市数量
+      let curKey = cityIndex[index]
+      // console.log(curKey,cityList[curKey])
+      return 36 + cityList[curKey].length*50
+    } 
+
     rowRenderer = ({
       key, // Unique key within array of rows
       index, // Index of row within collection
@@ -151,7 +162,7 @@ class CltyList extends Component {
             <List
               height={height}
               rowCount={this.state.cityIndex.length}
-              rowHeight={100}
+              rowHeight={this.excueHeight}
               rowRenderer={this.rowRenderer}
               width={width}
             />
