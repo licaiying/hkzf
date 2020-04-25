@@ -72,3 +72,5 @@ export async function getCurrCity() {
     return Promise.resolve(currCity);
   }
 }
+
+export { CURR_CITY }

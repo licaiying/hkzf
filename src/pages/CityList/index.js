@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { getCityList, getHotCity } from "../../utils/api/City";
-import { getCurrCity } from "../../utils";
+import { getCurrCity, setLocal, CURR_CITY } from "../../utils";
 
-import { NavBar, Icon } from 'antd-mobile'
+import { NavBar, Icon, Toast } from 'antd-mobile'
 
 import './index.scss'
 
@@ -69,7 +69,7 @@ class CltyList extends Component {
         <div key={key} style={style} className="city-item">
           <div className="title">{this.formatLetter(letter)}</div>
           {
-            item.map((item)=><div className="name" key={item.value}>{item.label}</div>)
+            item.map((item)=><div className="name" key={item.value} onClick={()=>this.changeCity(item)}>{item.label}</div>)
           }
         </div>
       );
@@ -141,6 +141,22 @@ class CltyList extends Component {
     // })
 
     return { cityList, cityIndex }
+  }
+
+  // 点击，切换城市
+  changeCity = (item) => {
+    // item:选中的城市信息
+    // 后台，只有 北京 上海 广州 深圳 有房源数据
+    const hasData = ['北京','上海','广州','深圳']
+    // 做判断
+    if (hasData.includes(item.label)) {
+      // 更新当前的城市数据
+      setLocal(CURR_CITY,JSON.stringify(item))
+      // 跳转到首页
+      this.props.history.push('/')
+    } else {
+      Toast.info('该城市暂无房源信息')
+    }
   }
 
 
