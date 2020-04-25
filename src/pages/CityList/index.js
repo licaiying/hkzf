@@ -20,7 +20,9 @@ class CltyList extends Component {
       // 归类的城市数据
       cityList:{},
       // 归类的城市数据的索引
-      cityIndex:[]
+      cityIndex:[],
+      // 当前滚动位置的索引,激活索引样式状态 
+      activeIndex:0
     }
 
     componentDidMount(){
@@ -162,7 +164,7 @@ class CltyList extends Component {
 
   // 渲染右侧索引
   renderCityIndex = () => {
-    const { cityIndex } = this.state;
+    const { cityIndex, activeIndex } = this.state;
     return cityIndex.map((item, index) => {
       return (
         <li
@@ -174,10 +176,15 @@ class CltyList extends Component {
             // console.log(this.listRef.scrollToRow)
 
             // index：为当前点击的字母的索引
-            this.listRef.scrollToRow(index) 
+            this.listRef.scrollToRow(index)
+
+            // 根据当前索引，改变状态数据，实现高亮的效果
+            this.setState({
+              activeIndex:index
+            })
           }}
         >
-          <span className={0 === index ? 'index-active' : ''}>
+          <span className={activeIndex === index ? 'index-active' : ''}>
             {this.formatLetter(item, true)}
           </span>
         </li>
