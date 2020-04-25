@@ -49,7 +49,7 @@ export async function getCurrCity() {
   // console.log(realName)
 
   // 做判断
-  if (!currCity || realName !== currCity.label) {
+  if (!currCity) {
     // 如果本地没有
     // 调用 百度地图的API 获取定位信息，返回Promise对象=>resolve结果
     return new Promise(async (resolve, reject) => {

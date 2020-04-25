@@ -28,12 +28,12 @@ class CltyList extends Component {
     }
 
     // 格式化列表的title
-    formatLetter = (letter) => {
+    formatLetter = (letter,isRight) => {
       switch (letter) {
         case '#':
-          return '当前城市';
+          return isRight?'当':'当前城市';
         case 'hot':
-          return '热门城市';  
+          return isRight?'热':'热门城市';  
         default:
           return letter.toUpperCase();
       }
@@ -160,6 +160,24 @@ class CltyList extends Component {
   }
 
 
+  // 渲染右侧索引
+  renderCityIndex = () => {
+    const { cityIndex } = this.state;
+    return cityIndex.map((item, index) => {
+      return (
+        <li
+          key={item}
+          className="city-index-item"
+        >
+          <span className={0 === index ? 'index-active' : ''}>
+            {this.formatLetter(item, true)}
+          </span>
+        </li>
+      )
+    })
+  }
+
+
   render() {
     return (
       <div className="cityList">
@@ -184,6 +202,11 @@ class CltyList extends Component {
             />
           )}
         </AutoSizer>
+
+       {/* 右侧索引列表 */}
+        <ul className="city-index">
+          {this.renderCityIndex()}
+        </ul>  
       </div>
     )
   }
