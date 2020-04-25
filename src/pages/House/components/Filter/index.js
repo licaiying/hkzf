@@ -7,8 +7,11 @@ import FilterPicker from '../FilterPicker'
 // FilterMore；过滤内容模板
 import FilterMore from '../FilterMore'
 
+
 // styles:是自定义的字段
 import styles from './index.module.css'
+import { getCurrCity } from '../../../../utils'
+import { getFilterHouse } from '../../../../utils/api/House'
 
 
 // 设置过滤器title的默认高亮显示
@@ -73,6 +76,29 @@ export default class Filter extends Component {
       openType:''
     })
   } 
+
+  componentDidMount(){
+    this.getFilterData()
+  }
+
+  // 获取房源筛选条件的数据：对应城市的id
+  getFilterData = async  () => {
+    // 调用封装的方法，获取城市的id
+    // let currCity = await getCurrCity()
+    // console.log(currCity) // {label: "北京", value: "AREA|88cff55c-aaa4-e2e0", pinyin: "beijing", short: "bj"}
+
+    // 解构
+    // value:相当于城市的id
+    let {value} = await getCurrCity()
+
+    // 发请求，向后台获取房源数据信息
+    let {status, data} = await getFilterHouse(value)
+    // console.log(res)
+    if (status === 200) {
+      // 把组件筛选数据存放到组件实例的成员属性上
+      this.filterDatas = data
+    }
+  }
 
 
   render() {
