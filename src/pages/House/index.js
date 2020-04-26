@@ -9,8 +9,32 @@ import styles from './index.module.css'
 import { getHouseInfoList } from '../../utils/api/House'
 import { getCurrCity } from '../../utils'
 
+import {List, AutoSizer} from 'react-virtualized';
+
 
 export default class HouseList extends React.Component {
+
+  state = {
+    // 房屋列表数据
+    list:[]
+  } 
+
+// 渲染列表项方法
+  renderHouseItem = ({
+    key, // Unique key within array of rows
+    index, // Index of row within collection
+    isScrolling, // The List is currently being scrolled
+    isVisible, // This row is visible within the List (eg it is not an overscanned row)
+    style, // Style object to be applied to row (to position it)
+  }) => {
+
+    return (
+      <div key={key} style={style} className="">
+        {index}
+      </div>
+    );
+  }
+
 
   async componentDidMount() {
     // 获取城市的id
@@ -39,8 +63,13 @@ export default class HouseList extends React.Component {
   // 获取房源信息的方法
   getHouseList = async () => {
     // 发请求，获取房源信息
-    let res = await getHouseInfoList(this.cityId, this.filters, 1, 20)
-    console.log(res)
+    let { status, data:{ list } } = await getHouseInfoList(this.cityId, this.filters, 1, 20)
+    // console.log(res)
+    if (status === 200) {
+      this.setState({
+        list
+      })
+    }
   }
 
 
@@ -50,6 +79,17 @@ export default class HouseList extends React.Component {
         {/* 条件筛选栏 */}
         <Filter onFilter={this.onFilter} />
         {/* 筛选结果：列表 */}
+        <AutoSizer>
+          {({ height, width }) => (
+            <List
+            height={height}
+            rowCount={this.state.list.length}
+            rowHeight={130}
+            rowRenderer={this.renderHouseItem}
+            width={width}
+          />
+          )}
+        </AutoSizer>
       </div>
     )
   }
