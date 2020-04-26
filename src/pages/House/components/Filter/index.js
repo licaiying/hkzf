@@ -21,6 +21,14 @@ const titleSelectedStatus = {
   more: false,
 };
 
+// 当前选中的picker值的默认数据
+const selectedValues = {
+  area:[],
+  mode:[],
+  price:[],
+  more:[]
+}
+
 export default class Filter extends Component {
   // 定义状态数据
   state = {
@@ -59,7 +67,10 @@ export default class Filter extends Component {
   // 点击 确定 按钮时，关闭Picker组件
   // val:子组件传递过来的数据
   onOk = (val) => {
-    console.log('picker选中的值：', val)
+    console.log('picker当前选中的值：', val)
+    // 将获得的值，存储到组件的this实例上
+    const {openType} = this.state
+    this.selectedValues[openType] = val
     this.setState({
       openType: "",
     });
@@ -74,6 +85,8 @@ export default class Filter extends Component {
 
   componentDidMount() {
     this.getFilterData();
+    // 当前选中的值
+    this.selectedValues = {...selectedValues}
   }
 
   // 获取房源筛选条件的数据：对应城市的id
@@ -105,6 +118,10 @@ export default class Filter extends Component {
       // 传递对应的picker数据
       // cols = 1:控制PickerView的列数,默认是一列显示
       let data, cols = 1;
+
+      // 存储当前选中的筛选数据(渲染在picker组件中)
+      let curSel = this.selectedValues[openType]
+
       // 根据openType去取当前点击的picker数据
       switch (openType) {
         case "area":
@@ -120,9 +137,11 @@ export default class Filter extends Component {
         default:
           break;
       }
-      return  <FilterPicker data={data} cols={cols} onOk={this.onOk} onCancle={this.onCancle} />    
+      // value={curSel}:传递当前选中的筛选数据，在下次打开的时候，显示已经选好的数据
+      return  <FilterPicker data={data} value={curSel} cols={cols} onOk={this.onOk} onCancle={this.onCancle} />    
     }
   };
+
 
   render() {
     return (

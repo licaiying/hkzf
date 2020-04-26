@@ -92,7 +92,8 @@ export default class FilterPicker extends Component {
   // 添加状态数据value
   state = {
     // picker当前选中的数据
-    value:[]
+    // value:[]
+    value:this.props.value  // 接收父组件传递过来的数据
   }
 
   render() {
