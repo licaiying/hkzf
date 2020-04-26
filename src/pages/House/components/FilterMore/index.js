@@ -6,16 +6,16 @@ import styles from './index.module.css'
 
 export default class FilterMore extends Component {
   // 渲染标签
-  renderFilters() {
+  renderFilters(data) {
     // 高亮类名： styles.tagActive
-    return (
-      <span className={[styles.tag, styles.tagActive].join(' ')}>东北</span>
-    )
+  return data.map((item)=>
+      <span key={item.value} className={[styles.tag].join(' ')}>{item.label}</span>)
   }
 
   render() {
   // console.log(this.props)
-    const { onOk, onCancle } = this.props
+    const { onOk, onCancle, data:{characteristic, floor, oriented, roomType} } = this.props
+    // console.log('第四个筛选器的数据：', data)
 
     return (
       <div className={styles.root}>
@@ -26,16 +26,16 @@ export default class FilterMore extends Component {
         <div className={styles.tags}>
           <dl className={styles.dl}>
             <dt className={styles.dt}>户型</dt>
-            <dd className={styles.dd}>{this.renderFilters()}</dd>
+            <dd className={styles.dd}>{this.renderFilters(roomType)}</dd>
 
             <dt className={styles.dt}>朝向</dt>
-            <dd className={styles.dd}>{this.renderFilters()}</dd>
+            <dd className={styles.dd}>{this.renderFilters(oriented)}</dd>
 
             <dt className={styles.dt}>楼层</dt>
-            <dd className={styles.dd}>{this.renderFilters()}</dd>
+            <dd className={styles.dd}>{this.renderFilters(floor)}</dd>
 
             <dt className={styles.dt}>房屋亮点</dt>
-            <dd className={styles.dd}>{this.renderFilters()}</dd>
+            <dd className={styles.dd}>{this.renderFilters(characteristic)}</dd>
           </dl>
         </div>
 
