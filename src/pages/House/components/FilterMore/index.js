@@ -5,11 +5,42 @@ import FilterFooter from '../../../../components/FilterFooter'
 import styles from './index.module.css'
 
 export default class FilterMore extends Component {
+
+  // 设置状态数据
+  state = {
+    // 当前选中的条件数据
+    selected:[]
+  }
+
+  // 处理选中的条件数据
+  handlerSel = (id) => {
+    // console.log(id)
+    // 获取状态数据
+    const {selected} = this.state
+    // 定义已选中的数据数组newSelected
+    let newSelected = [...selected]
+    // 判断当前数组中是否存在=>删除 / 添加
+    let index = newSelected.indexOf(id)
+    if (index < 0) {
+      // 不存在=>添加
+      newSelected.push(id)
+    } else {
+      // 存在=>删除
+      newSelected.splice(index,1)
+    }
+    // 根据修改后的数组，更新数据和页面
+    this.setState({
+      selected:newSelected
+    })
+  }
+
   // 渲染标签
   renderFilters(data) {
     // 高亮类名： styles.tagActive
   return data.map((item)=>
-      <span key={item.value} className={[styles.tag].join(' ')}>{item.label}</span>)
+      <span key={item.value} 
+        onClick={()=>this.handlerSel(item.value)}
+        className={[styles.tag, this.state.selected.includes(item.value)?styles.tagActive:''].join(' ')}>{item.label}</span>)
   }
 
   render() {
@@ -40,7 +71,7 @@ export default class FilterMore extends Component {
         </div>
 
         {/* 底部按钮 */}
-        <FilterFooter className={styles.footer} onOk={onOk} onCancle={onCancle} />
+        <FilterFooter className={styles.footer} onOk={()=>onOk(this.state.selected)} onCancle={onCancle} />
       </div>
     )
   }

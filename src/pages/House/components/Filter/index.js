@@ -92,10 +92,12 @@ export default class Filter extends Component {
   // 点击 确定 按钮时，关闭Picker组件
   // val:子组件传递过来的数据
   onOk = (val) => {
-    console.log('picker当前选中的值：', val)
+    // console.log('当前选中的值：', val)
     // 将获得的值，存储到组件的this实例上
     const {openType} = this.state
     this.selectedValues[openType] = val
+    // console.log('当前选中的值：', val, this.selectedValues)
+
     this.setState({
       openType: "",
       // 处理高亮状态
