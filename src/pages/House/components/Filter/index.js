@@ -172,6 +172,22 @@ export default class Filter extends Component {
   };
 
 
+  // 渲染第四个筛选器
+  renderFilterMore = () => {
+    const { openType } = this.state
+    if (openType === 'more') {
+      // 传递后台过滤条件的数据
+      // console.log(this.filterDatas)
+      const { characteristic, floor, oriented, roomType } = this.filterDatas
+      let data = { characteristic, floor, oriented, roomType }
+
+      return (
+        <FilterMore data={data} onOk={this.onOk} onCancle={this.onCancle} />
+      )
+    }
+  }
+
+
   render() {
     return (
       <div className={styles.root}>
@@ -192,7 +208,7 @@ export default class Filter extends Component {
           {this.renderPicker()}
 
           {/* 最后一个菜单对应的内容： */}
-          {/* <FilterMore /> */}
+          {this.renderFilterMore()}
         </div>
       </div>
     );
