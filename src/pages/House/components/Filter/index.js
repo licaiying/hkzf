@@ -92,6 +92,39 @@ export default class Filter extends Component {
   }
 
 
+  // 处理所有的筛选器数据 => 后台同学需要的数据格式
+  formatFilters = (selDatas) => {
+    // selDatas:传递的存储的筛选条件数据
+    // 获取存储的筛选条件数据
+    const {area, mode, price, more} = selDatas
+
+    // 创建一个空对象，存储格式化的数据
+    const filters = {}
+    // 处理区域(area)部分：区域 | 地铁
+    let areaKey = area[0],aval;
+    if (area.length === 2) {
+      aval = area[1]
+    } else {
+      if (area[2] === 'null') {
+        aval = area[1]
+      } else {
+        aval = area[2]
+      }
+    }
+    // 处理后的 区域部分
+    filters[areaKey] = aval
+    // 出租方式部分 
+    filters.rentType = mode[0]
+    // 价格部分
+    filters.price = price[0]
+    // 更多部分
+    filters.more = more.join(',')
+
+    // 返回处理后的数据
+    return filters
+  }
+
+
   // 点击 确定 按钮时，关闭Picker组件
   // val:子组件传递过来的数据
   onOk = (val) => {
@@ -105,6 +138,9 @@ export default class Filter extends Component {
       openType: "",
       // 处理高亮状态
       titleSelectedStatus:this.handlerSel()
+    },()=>{
+      // console.log('列表需要的数据', this.formatFilters(this.selectedValues))
+      this.formatFilters(this.selectedValues)
     });
   };
 
