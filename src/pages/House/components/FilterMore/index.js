@@ -9,7 +9,9 @@ export default class FilterMore extends Component {
   // 设置状态数据
   state = {
     // 当前选中的条件数据
-    selected:[]
+    // selected:[]
+    // 接收父组件传递过来的,当前选中的条件数据
+    selected:this.props.value
   }
 
   // 处理选中的条件数据

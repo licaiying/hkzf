@@ -81,7 +81,10 @@ export default class Filter extends Component {
         newStatus[key] = true
       } else if (key === 'price' && cur[0] !== 'null') {
         newStatus[key] = true
-      } else {
+      } else if (key === 'more' && cur.length > 0) {
+        newStatus[key] = true
+      }
+       else {
         newStatus[key] = false
       }
     })
@@ -184,7 +187,7 @@ export default class Filter extends Component {
       let data = { characteristic, floor, oriented, roomType }
 
       return (
-        <FilterMore data={data} onOk={this.onOk} onCancle={this.onCancle} />
+        <FilterMore data={data} value={this.selectedValues[openType]} onOk={this.onOk} onCancle={this.onCancle} />
       )
     }
   }
