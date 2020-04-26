@@ -57,7 +57,9 @@ export default class Filter extends Component {
   };
 
   // 点击 确定 按钮时，关闭Picker组件
-  onOk = () => {
+  // val:子组件传递过来的数据
+  onOk = (val) => {
+    console.log('picker选中的值：', val)
     this.setState({
       openType: "",
     });
