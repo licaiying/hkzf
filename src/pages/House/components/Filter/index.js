@@ -140,7 +140,8 @@ export default class Filter extends Component {
       titleSelectedStatus:this.handlerSel()
     },()=>{
       // console.log('列表需要的数据', this.formatFilters(this.selectedValues))
-      this.formatFilters(this.selectedValues)
+      // 子组件调用父组件的方法，点击确定按钮时，传递用户选择的过滤器数据给子组件
+      this.props.onFilter(this.formatFilters(this.selectedValues))
     });
   };
 
