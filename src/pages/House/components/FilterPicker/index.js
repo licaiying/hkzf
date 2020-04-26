@@ -89,6 +89,13 @@ const province = [
 
 export default class FilterPicker extends Component {
 
+  // constructor:只在组件实例化的时候(new的时候)，执行1次
+  // constructor(props){
+  //   super(props)
+  //   console.log('子组件picker=>constructor演示',this.props.value)
+  // }
+
+  // state：只在组件实例化的时候，执行1次
   // 添加状态数据value
   state = {
     // picker当前选中的数据

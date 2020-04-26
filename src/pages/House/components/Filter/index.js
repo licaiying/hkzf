@@ -138,7 +138,7 @@ export default class Filter extends Component {
           break;
       }
       // value={curSel}:传递当前选中的筛选数据，在下次打开的时候，显示已经选好的数据
-      return  <FilterPicker data={data} value={curSel} cols={cols} onOk={this.onOk} onCancle={this.onCancle} />    
+      return  <FilterPicker data={data} value={curSel} key={openType} cols={cols} onOk={this.onOk} onCancle={this.onCancle} />    
     }
   };
 
