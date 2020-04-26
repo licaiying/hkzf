@@ -10,6 +10,8 @@ import { getHouseInfoList } from '../../utils/api/House'
 import { getCurrCity } from '../../utils'
 
 import {List, AutoSizer} from 'react-virtualized';
+import HouseItem from '../../components/HouseItem'
+import { BASE_URL } from '../../utils/axios'
 
 
 export default class HouseList extends React.Component {
@@ -27,11 +29,15 @@ export default class HouseList extends React.Component {
     isVisible, // This row is visible within the List (eg it is not an overscanned row)
     style, // Style object to be applied to row (to position it)
   }) => {
-
+    // 获取数据 => 渲染列表项
+    const {list} = this.state
+    // 获取当前列表项的数据
+    const item = list[index]
+    // 因为后台返回的图片路径的字段名称为houseImg 与 定义的 src 不一样，所以需做处理
+    // item.houseImg = `${BASE_URL}${item.houseImg}`
+    item.src = `${BASE_URL}${item.houseImg}`
     return (
-      <div key={key} style={style} className="">
-        {index}
-      </div>
+      <HouseItem {...item} key={key} style={style}></HouseItem>     
     );
   }
 
@@ -82,6 +88,7 @@ export default class HouseList extends React.Component {
         <AutoSizer>
           {({ height, width }) => (
             <List
+            className={styles.houseList}
             height={height}
             rowCount={this.state.list.length}
             rowHeight={130}
