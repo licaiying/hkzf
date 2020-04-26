@@ -23,9 +23,10 @@ const titleSelectedStatus = {
 
 // 当前选中的picker值的默认数据
 const selectedValues = {
-  area:[],
-  mode:[],
-  price:[],
+  // 默认值(没有选中)
+  area:["area","null"], // 包含区域和地铁
+  mode:["null"],
+  price:["null"],
   more:[]
 }
 
@@ -64,6 +65,30 @@ export default class Filter extends Component {
     return openType === "area" || openType === "mode" || openType === "price";
   };
 
+
+  // 处理确定的时候，查询selectedValues对应的选择器是否有数据=> 如果有，高亮显示对应的title
+  handlerSel = () => {
+    // 定义一个变量，存储新的高亮状态 
+    const newStatus = {...titleSelectedStatus}
+    // 遍历存储的选中数据selectedValues，确定是否有数据，并需要高亮
+    Object.keys(this.selectedValues).forEach((key)=>{
+      // 获取当前picker选中的值
+      let cur = this.selectedValues[key]
+      // 判断是否高亮
+      if (key === 'area' && (cur[1] !== 'null' || cur[0] === 'subway')) {
+        newStatus[key] = true
+      } else if (key === 'mode' && cur[0] !== 'null') {
+        newStatus[key] = true
+      } else if (key === 'price' && cur[0] !== 'null') {
+        newStatus[key] = true
+      } else {
+        newStatus[key] = false
+      }
+    })
+    return newStatus
+  }
+
+
   // 点击 确定 按钮时，关闭Picker组件
   // val:子组件传递过来的数据
   onOk = (val) => {
@@ -73,6 +98,8 @@ export default class Filter extends Component {
     this.selectedValues[openType] = val
     this.setState({
       openType: "",
+      // 处理高亮状态
+      titleSelectedStatus:this.handlerSel()
     });
   };
 
@@ -80,6 +107,8 @@ export default class Filter extends Component {
   onCancle = () => {
     this.setState({
       openType: "",
+      // 处理高亮状态
+      titleSelectedStatus:this.handlerSel()
     });
   };
 
