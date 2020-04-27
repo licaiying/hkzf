@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Flex } from 'antd-mobile'
+import { Flex, Toast } from 'antd-mobile'
 
 import Filter from './components/Filter'
 // 导入样式
@@ -12,6 +12,7 @@ import { getCurrCity } from '../../utils'
 import {List, AutoSizer, InfiniteLoader} from 'react-virtualized';
 import HouseItem from '../../components/HouseItem'
 import { BASE_URL } from '../../utils/axios'
+import NoHouse from '../../components/NoHouse'
 
 
 export default class HouseList extends React.Component {
@@ -84,6 +85,11 @@ export default class HouseList extends React.Component {
     let { status, data:{ list, count } } = await getHouseInfoList(this.cityId, this.filters, 1, 20)
     // console.log(res)
     if (status === 200) {
+      // 有数据提示
+      if (count !== 0) {
+        Toast.success(`获取到${count}条房源数据!`)
+      }
+
       this.setState({
         list,
         count
@@ -94,7 +100,7 @@ export default class HouseList extends React.Component {
   // 下拉加载更多
   // 判断当前行，是否加载完成
   isRowLoaded = ({ index }) => {
-    return !!this.state.list[index];
+    return !!this.state.list[index];  // !!: 一般处理null，undefined和空值判断
   }
   
   // 回调函数：下拉到一定位置执行=>调用后台数据获取下一页数据=>刷新房源列表
@@ -111,6 +117,33 @@ export default class HouseList extends React.Component {
       })
   }
 
+  renderList = () => {
+    const {count} = this.state
+    // 没有数据渲染NoHouse组件
+    return count>0?<InfiniteLoader
+      isRowLoaded={this.isRowLoaded}
+      loadMoreRows={this.loadMoreRows}
+      rowCount={this.state.count}
+      minimumBatchSize={10}  // 下拉更新时，每次刷新加载的房源数据条数
+    >
+      {({ onRowsRendered, registerChild }) => (
+        <AutoSizer>
+          {({ height, width }) => (
+            <List
+              height={height}
+              onRowsRendered={onRowsRendered}
+              ref={registerChild}
+              className={styles.houseList}
+              rowCount={this.state.count}
+              rowHeight={130}
+              rowRenderer={this.renderHouseItem}
+              width={width}
+            />
+          )}
+        </AutoSizer>        
+      )}
+    </InfiniteLoader>:<NoHouse>暂无房源数据信息</NoHouse>
+  }
 
   render() {
     return (
@@ -118,29 +151,7 @@ export default class HouseList extends React.Component {
         {/* 条件筛选栏 */}
         <Filter onFilter={this.onFilter} />
         {/* 筛选结果：列表 */}
-        <InfiniteLoader
-        isRowLoaded={this.isRowLoaded}
-        loadMoreRows={this.loadMoreRows}
-        rowCount={this.state.count}
-        minimumBatchSize={10}  // 下拉更新时，每次刷新加载的房源数据条数
-      >
-         {({ onRowsRendered, registerChild }) => (
-          <AutoSizer>
-            {({ height, width }) => (
-              <List
-                height={height}
-                onRowsRendered={onRowsRendered}
-                ref={registerChild}
-                className={styles.houseList}
-                rowCount={this.state.count}
-                rowHeight={130}
-                rowRenderer={this.renderHouseItem}
-                width={width}
-              />
-            )}
-          </AutoSizer>        
-        )}
-      </InfiniteLoader>
+        {this.renderList()}
       </div>
     )
   }
