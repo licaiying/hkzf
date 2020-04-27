@@ -6,6 +6,8 @@ import Home from './pages/Home'
 import CityList from './pages/CityList'
 import Map from './pages/Map'
 import NotFound from './pages/NotFound'
+import HouseDetail from './components/HouseDetail';
+
 
 // 测试按钮
 // import {Button} from 'antd-mobile'
@@ -27,6 +29,8 @@ function App() {
           <Route path="/cityList" component={CityList}></Route>
           {/* 地图找房 */}
           <Route path="/map" component={Map}></Route>
+          {/* 房源详情 */}
+          <Route path="/detail/:id" component={HouseDetail}></Route>
           {/* 配置404页面 */}
           <Route component={NotFound}></Route>
         </Switch>

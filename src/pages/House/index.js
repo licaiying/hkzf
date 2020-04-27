@@ -36,6 +36,7 @@ export default class HouseList extends React.Component {
     const {list} = this.state
     // 获取当前列表项的数据
     const item = list[index]
+    // console.log(item)  // 每条房源的具体详情信息
 
     // 数据item没有的时候的处理
     if (!item) {
@@ -50,7 +51,9 @@ export default class HouseList extends React.Component {
     // item.houseImg = `${BASE_URL}${item.houseImg}`
     item.src = `${BASE_URL}${item.houseImg}`
     return (
-      <HouseItem {...item} key={key} style={style}></HouseItem>     
+      <HouseItem {...item} key={key} style={style} onClick={()=>{
+        this.props.history.push('/detail/'+item.houseCode)
+      }}></HouseItem>     
     );
   }
 
