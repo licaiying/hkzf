@@ -9,7 +9,7 @@ import styles from './index.module.css'
 import { getHouseInfoList } from '../../utils/api/House'
 import { getCurrCity } from '../../utils'
 
-import {List, AutoSizer} from 'react-virtualized';
+import {List, AutoSizer, InfiniteLoader} from 'react-virtualized';
 import HouseItem from '../../components/HouseItem'
 import { BASE_URL } from '../../utils/axios'
 
@@ -18,7 +18,9 @@ export default class HouseList extends React.Component {
 
   state = {
     // 房屋列表数据
-    list:[]
+    list:[],
+    // 列表数据的总条数
+    count:0
   } 
 
 // 渲染列表项方法
@@ -69,13 +71,34 @@ export default class HouseList extends React.Component {
   // 获取房源信息的方法
   getHouseList = async () => {
     // 发请求，获取房源信息
-    let { status, data:{ list } } = await getHouseInfoList(this.cityId, this.filters, 1, 20)
+    let { status, data:{ list, count } } = await getHouseInfoList(this.cityId, this.filters, 1, 20)
     // console.log(res)
     if (status === 200) {
       this.setState({
-        list
+        list,
+        count
       })
     }
+  }
+
+  // 下拉加载更多
+  // 判断当前行，是否加载完成
+  isRowLoaded = ({ index }) => {
+    return !!this.state.list[index];
+  }
+  
+  // 回调函数：下拉到一定位置执行=>调用后台数据获取下一页数据=>刷新房源列表
+  loadMoreRows = ({ startIndex, stopIndex }) => {
+    return getHouseInfoList(this.cityId, this.filters, startIndex, stopIndex)
+      .then(res => {
+        // Store response data in list...
+        // console.log('下一页数据：',startIndex, stopIndex, res) // 下一页数据： 20 29 {status: 200, data: {…}, description: "请求成功"}
+        if (res.status === 200) {
+          this.setState({
+            list:[...this.state.list, ...res.data.list]
+          })
+        }
+      })
   }
 
 
@@ -85,18 +108,29 @@ export default class HouseList extends React.Component {
         {/* 条件筛选栏 */}
         <Filter onFilter={this.onFilter} />
         {/* 筛选结果：列表 */}
-        <AutoSizer>
-          {({ height, width }) => (
-            <List
-            className={styles.houseList}
-            height={height}
-            rowCount={this.state.list.length}
-            rowHeight={130}
-            rowRenderer={this.renderHouseItem}
-            width={width}
-          />
-          )}
-        </AutoSizer>
+        <InfiniteLoader
+        isRowLoaded={this.isRowLoaded}
+        loadMoreRows={this.loadMoreRows}
+        rowCount={this.state.count}
+        minimumBatchSize={10}  // 下拉更新时，每次刷新加载的房源数据条数
+      >
+         {({ onRowsRendered, registerChild }) => (
+          <AutoSizer>
+            {({ height, width }) => (
+              <List
+                height={height}
+                onRowsRendered={onRowsRendered}
+                ref={registerChild}
+                className={styles.houseList}
+                rowCount={this.state.count}
+                rowHeight={130}
+                rowRenderer={this.renderHouseItem}
+                width={width}
+              />
+            )}
+          </AutoSizer>        
+        )}
+      </InfiniteLoader>
       </div>
     )
   }
