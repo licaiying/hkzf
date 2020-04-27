@@ -23,3 +23,9 @@ export function getHouseInfoList (cityId, filters, start, end) {
         }
     })
 }
+
+
+// 根据房源ID,获取房源详情
+export function getHouseDetail(id) {
+    return axiosAPI.get(`/houses/${id}`)
+}

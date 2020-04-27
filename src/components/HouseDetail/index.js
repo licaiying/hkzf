@@ -5,6 +5,7 @@ import HouseItem from '../HouseItem'
 import styles from './index.module.css'
 import HousePackage from '../HousePackage'
 import { BASE_URL } from '../../utils/axios'
+import { getHouseDetail } from '../../utils/api/House'
 
 
 // 猜你喜欢
@@ -137,22 +138,23 @@ export default class HouseDetail extends Component {
       isLoading: true
     })
 
-    const res = await axios.get(
-      `${BASE_URL}/houses/5cc47c8d1439630e5b47d45d`
-    )
-
+    const {status,data} = await getHouseDetail(id)
+    // console.log(res) // {status: 200, data: {…}, description: "请求成功"}
     // console.log(res.data.body)
 
-    this.setState({
-      houseInfo: res.data.body,
-      isLoading: false
-    })
-
-    const { community, coord } = res.data.body
-
-    // 渲染地图
-    this.renderMap(community, coord)
-  }
+    if (status === 200) {
+        this.setState({
+          houseInfo: data,
+          isLoading: false
+        })
+    
+        const { community, coord } = data
+    
+        // 渲染地图
+        this.renderMap(community, coord)
+      }
+    }
+  
 
   // 渲染轮播图结构
   renderSwipers() {
@@ -175,6 +177,7 @@ export default class HouseDetail extends Component {
     const point = new BMap.Point(longitude, latitude)
     map.centerAndZoom(point, 17)
 
+    // 覆盖物 => 显示房源的位置信息
     const label = new BMap.Label('', {
       position: point,
       offset: new BMap.Size(0, -36)
@@ -233,7 +236,7 @@ export default class HouseDetail extends Component {
         <NavBar
           mode="dark"
           icon={<Icon type="left" />}
-          onLeftClick={() => console.log('onLeftClick')}
+          onLeftClick={() => this.props.history.goBack()}
           rightContent={[<i key="share" className="iconfont icon-share" />]}
         >
           房屋详情
