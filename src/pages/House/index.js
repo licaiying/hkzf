@@ -47,12 +47,21 @@ export default class HouseList extends React.Component {
       )
     }
 
+
     // 因为后台返回的图片路径的字段名称为houseImg 与 定义的 src 不一样，所以需做处理
     // item.houseImg = `${BASE_URL}${item.houseImg}`
     item.src = `${BASE_URL}${item.houseImg}`
     return (
       <HouseItem {...item} key={key} style={style} onClick={()=>{
-        this.props.history.push('/detail/'+item.houseCode)
+        // this.props.history.push('/detail/'+item.houseCode)
+
+        // 演示 哈希模式(hash) 和 历史模式(history) 通过push传递参数的不同点
+        // 1. history模式 => H5模式
+        // this.props.history.push('/detail/'+item.houseCode, { id: item.houseCode, a: '历史模式' })
+
+        // 2. hash模式
+        this.props.history.push({ pathname: '/detail/'+ item.houseCode, state: { id: item.houseCode, a: 'hash模式' }})
+
       }}></HouseItem>     
     );
   }

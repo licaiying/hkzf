@@ -131,6 +131,7 @@ export default class HouseDetail extends Component {
 
   // 获取房屋详细信息
   async getHouseDetail() {
+    // debugger
     const { id } = this.props.match.params
 
     // 开启loading
