@@ -35,6 +35,16 @@ export default class HouseList extends React.Component {
     const {list} = this.state
     // 获取当前列表项的数据
     const item = list[index]
+
+    // 数据item没有的时候的处理
+    if (!item) {
+      return (
+        <div style={style} key={key}>
+          <p className={styles.loading}></p>
+        </div>
+      )
+    }
+
     // 因为后台返回的图片路径的字段名称为houseImg 与 定义的 src 不一样，所以需做处理
     // item.houseImg = `${BASE_URL}${item.houseImg}`
     item.src = `${BASE_URL}${item.houseImg}`
