@@ -1,20 +1,19 @@
-import React, { Component } from 'react'
-import { Flex, WingBlank, WhiteSpace, NavBar, Toast } from 'antd-mobile'
+import React, { Component } from "react";
+import { Flex, WingBlank, WhiteSpace, NavBar, Toast } from "antd-mobile";
 
-import { Link } from 'react-router-dom'
-import { login } from '../../utils/api/User'
+import { Link } from "react-router-dom";
+import { login } from "../../utils/api/User";
 
-import styles from './index.module.css'
-import { HKZF_TOKEN } from '../../utils/index.js'
+import styles from "./index.module.css";
+import { HKZF_TOKEN } from "../../utils/index.js";
 
-import { withFormik } from 'formik';
+import { withFormik } from "formik";
 
 // 验证规则：
 // const REG_UNAME = /^[a-zA-Z_\d]{5,8}$/
 // const REG_PWD = /^[a-zA-Z_\d]{5,12}$/
 
 class Login extends Component {
-
   // 设置状态数据
   // state = {
   //   // 用户名
@@ -22,7 +21,6 @@ class Login extends Component {
   //   // 密码
   //   password:'test2'
   // }
-
 
   // // 受控组件(双向绑定) => 一个事件，处理多个表单元素
   // handlerChange = (e) => {
@@ -33,28 +31,27 @@ class Login extends Component {
   // }
 
   // 登录
-  login = async (e) => {
-    // 阻止默认事件
-    e.preventDefault();
-    // 获取用户名和密码
-    const {username,password} = this.state
-    console.log(username,password)
-    // 调用接口 => 校验用户名和密码
-    const {status,data,description} = await login({username,password})
-    // debugger
-    if (status === 200) {
-      Toast.success(description, 2)  // 2秒后，关闭提示框
-      // 存储token
-      localStorage.setItem(HKZF_TOKEN, data.token)
-      // 跳转页面到首页
-      this.props.history.push('/') 
-    } else {
-      Toast.fail(description, 2)  // 2秒后，关闭提示框
-    }
-  }
+  // login = async (e) => {
+  //   // 阻止默认事件
+  //   e.preventDefault();
+  //   // 获取用户名和密码
+  //   const {username,password} = this.state
+  //   console.log(username,password)
+  //   // 调用接口 => 校验用户名和密码
+  //   const {status,data,description} = await login({username,password})
+  //   // debugger
+  //   if (status === 200) {
+  //     Toast.success(description, 2)  // 2秒后，关闭提示框
+  //     // 存储token
+  //     localStorage.setItem(HKZF_TOKEN, data.token)
+  //     // 跳转页面到首页
+  //     this.props.history.push('/')
+  //   } else {
+  //     Toast.fail(description, 2)  // 2秒后，关闭提示框
+  //   }
+  // }
 
   render() {
-
     const {
       values,
       touched,
@@ -67,14 +64,12 @@ class Login extends Component {
     return (
       <div className={styles.root}>
         {/* 顶部导航 */}
-        <NavBar mode="light">
-          账号登录
-        </NavBar>
+        <NavBar mode="light">账号登录</NavBar>
         <WhiteSpace size="xl" />
 
         {/* 登录表单 */}
         <WingBlank>
-          <form onSubmit={this.login}>
+          <form onSubmit={handleSubmit}>
             <div className={styles.formItem}>
               <input
                 className={styles.input}
@@ -111,13 +106,14 @@ class Login extends Component {
           </Flex>
         </WingBlank>
       </div>
-    )
+    );
   }
 }
 
 // 返回了增强的新组件 => 基础表单处理和校验
 const NewLogin = withFormik({
-  mapPropsToValues: () => ({ username: '111',password:'222' }),
+  // 设置了状态数据(注意：状态数据的键 必须与 input元素的name属性值对应)
+  mapPropsToValues: () => ({ username: "", password: "" }),
 
   // Custom sync validation
   // validate: values => {
@@ -130,14 +126,27 @@ const NewLogin = withFormik({
   //   return errors;
   // },
 
-  handleSubmit: (values, { setSubmitting }) => {
-    setTimeout(() => {
-      alert(JSON.stringify(values, null, 2));
-      setSubmitting(false);
-    }, 1000);
+  handleSubmit: async (values,{props:{history}}) => {
+    // console.log(values,frb);  // {username: "...", password: "..."}
+
+    // 获取用户名和密码
+    const { username, password } = values;
+    // console.log(username, password);
+    // 调用接口 => 校验用户名和密码
+    const { status, data, description } = await login({ username, password });
+    // debugger
+    if (status === 200) {
+      Toast.success(description, 2); // 2秒后，关闭提示框
+      // 存储token
+      localStorage.setItem(HKZF_TOKEN, data.token);
+      // 跳转页面到首页
+      history.push("/");
+    } else {
+      Toast.fail(description, 2); // 2秒后，关闭提示框
+    }
   },
 
-  displayName: 'BasicForm',
+  displayName: "BasicForm",
 })(Login);
 
-export default NewLogin
+export default NewLogin;
