@@ -19,7 +19,7 @@ const getCityName = async () => {
 //       2.将城市信息存储到本地=>localStorage
 
 // 定义key
-const CURR_CITY = "curr_city";
+const CURR_CITY = "curr_city", HKZF_TOKEN = "hkzf_token";
 
 // 封装本地存储方法
 // 1.存储本地数据
@@ -73,4 +73,4 @@ export async function getCurrCity() {
   }
 }
 
-export { CURR_CITY }
+export { CURR_CITY, HKZF_TOKEN }
